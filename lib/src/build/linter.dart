@@ -283,7 +283,7 @@ class _LinterVisitor extends TreeVisitor {
           span: node.sourceSpan);
     }
 
-    if (!_skipMissingElementWarning && _elements[extendsTag] == null &&
+    if (!_skipMissingElementWarning && _isEntryPoint && [extendsTag] == null &&
         isCustomTagName(extendsTag)) {
       _logger.warning(CUSTOM_ELEMENT_NOT_FOUND.create({'tag': extendsTag}),
           span: node.sourceSpan);
@@ -387,7 +387,7 @@ class _LinterVisitor extends TreeVisitor {
 
     var info = _elements[customTagName];
     if (info == null) {
-      if (!_skipMissingElementWarning) {
+      if (!_skipMissingElementWarning && _isEntryPoint) {
         _logger.warning(CUSTOM_ELEMENT_NOT_FOUND.create({'tag': customTagName}),
             span: node.sourceSpan);
       }
