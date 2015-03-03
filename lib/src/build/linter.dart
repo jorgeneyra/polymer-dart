@@ -263,7 +263,7 @@ class _LinterVisitor extends TreeVisitor {
   /// Produce warnings if using `<polymer-element>` in the wrong place or if the
   /// definition is not complete.
   void _validatePolymerElement(Element node) {
-    if (!_elements.containsKey('polymer-element')) {
+    if (_isEntryPoint && !_elements.containsKey('polymer-element')) {
       _logger.warning(usePolymerHtmlMessageFrom(_sourceId),
           span: node.sourceSpan);
     }
