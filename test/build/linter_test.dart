@@ -93,6 +93,24 @@ void main() {
           '(web/foo/test.html 1 0)',
     ]);
 
+    _testLinter('missing polymer.html doesn\'t warn in lib', {
+      'a|lib/test.html': '<!DOCTYPE html><html>\n'
+          '<polymer-element name="x-a"></polymer-element>'
+          '<script type="application/dart" src="foo.dart">'
+          '</script>'
+          '<script src="packages/browser/dart.js"></script>'
+          '</html>',
+    }, []);
+
+    _testLinter('missing polymer.html doesn\'t warn in lib/foo/bar', {
+      'a|lib/foo/bar/test.html': '<!DOCTYPE html><html>\n'
+          '<polymer-element name="x-a"></polymer-element>'
+          '<script type="application/dart" src="foo.dart">'
+          '</script>'
+          '<script src="packages/browser/dart.js"></script>'
+          '</html>',
+    }, []);
+
     _testLinter('missing Dart code', {
       'a|web/test.html': '<!DOCTYPE html><html>'
           '<link rel="import" href="packages/polymer/polymer.html">'

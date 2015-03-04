@@ -50,7 +50,7 @@ class Linter extends Transformer with PolymerTransformer {
       return _collectElements(document, id, transform, logger, seen).then(
           (elements) {
         new _LinterVisitor(id, logger, elements, isEntryPoint,
-            skipMissingElementWarning).run(document);
+            skipMissingElementWarning || !isEntryPoint).run(document);
 
         // Write out the logs collected by our [BuildLogger].
         if (options.injectBuildLogsInOutput && logger is BuildLogger) {
@@ -263,7 +263,7 @@ class _LinterVisitor extends TreeVisitor {
   /// Produce warnings if using `<polymer-element>` in the wrong place or if the
   /// definition is not complete.
   void _validatePolymerElement(Element node) {
-    if (!_skipMissingElementWarning && _isEntryPoint &&
+    if (!_skipMissingElementWarning &&
         !_elements.containsKey('polymer-element')) {
       _logger.warning(usePolymerHtmlMessageFrom(_sourceId),
           span: node.sourceSpan);
@@ -284,8 +284,8 @@ class _LinterVisitor extends TreeVisitor {
           span: node.sourceSpan);
     }
 
-    if (!_skipMissingElementWarning && _isEntryPoint &&
-        _elements[extendsTag] == null && isCustomTagName(extendsTag)) {
+    if (!_skipMissingElementWarning && _elements[extendsTag] == null &&
+        isCustomTagName(extendsTag)) {
       _logger.warning(CUSTOM_ELEMENT_NOT_FOUND.create({'tag': extendsTag}),
           span: node.sourceSpan);
     }
