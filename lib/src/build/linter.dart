@@ -263,7 +263,8 @@ class _LinterVisitor extends TreeVisitor {
   /// Produce warnings if using `<polymer-element>` in the wrong place or if the
   /// definition is not complete.
   void _validatePolymerElement(Element node) {
-    if (_isEntryPoint && !_elements.containsKey('polymer-element')) {
+    if (!_skipMissingElementWarning && _isEntryPoint &&
+        !_elements.containsKey('polymer-element')) {
       _logger.warning(usePolymerHtmlMessageFrom(_sourceId),
           span: node.sourceSpan);
     }
@@ -283,8 +284,8 @@ class _LinterVisitor extends TreeVisitor {
           span: node.sourceSpan);
     }
 
-    if (!_skipMissingElementWarning && _isEntryPoint && [extendsTag] == null &&
-        isCustomTagName(extendsTag)) {
+    if (!_skipMissingElementWarning && _isEntryPoint &&
+        _elements[extendsTag] == null && isCustomTagName(extendsTag)) {
       _logger.warning(CUSTOM_ELEMENT_NOT_FOUND.create({'tag': extendsTag}),
           span: node.sourceSpan);
     }
